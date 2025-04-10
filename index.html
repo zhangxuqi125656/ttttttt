@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>食堂菜单公示系统 - 登录及操作</title>
+    <style>
+        #public-menu {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 30px auto;
+            max-width: 900px;
+        }
+
+        #public-menu h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fa;
+            color: #333;
+        }
+
+        nav {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #3498db;
+        }
+
+        section {
+            padding: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+       .canteen {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+       .canteen h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+       .dish-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+       .dish {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            transition: box-shadow 0.3s ease;
+        }
+
+       .dish:hover {
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+       .dish-name {
+            font-size: 18px;
+            color: #333;
+        }
+
+       .dish-price {
+            font-size: 18px;
+            color: #e74c3c;
+        }
+
+        #upload-dish {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        #upload-dish h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+       .upload-item {
+            margin-bottom: 10px;
+        }
+
+       .upload-item label {
+            display: block;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+
+       .upload-item input,
+       .upload-item select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        #upload-form button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            margin-right: 10px;
+        }
+
+        #upload-form button:hover {
+            background-color: #2980b9;
+        }
+
+        #upload-today-menu {
+            background-color: #e74c3c;
+        }
+
+        #upload-today-menu:hover {
+            background-color: #c0392b;
+        }
+
+        #date {
+            text-align: right;
+            font-size: 14px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        #upload-success {
+            color: #27ae60;
+            margin-top: 10px;
+            display: none;
+        }
+
+        #today-dishes {
+            margin-top: 20px;
+        }
+
+       .today-dish {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+       .today-dish button {
+            background-color: #e74c3c;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+       .today-dish button:hover {
+            background-color: #c0392b;
+        }
+
+        #date-canteen {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        #date-canteen > div {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        #date-canteen label {
+            margin-right: 3px;
+            display: inline;
+        }
+
+        #date-canteen input[type="radio"] {
+            margin-right: 2px;
+        }
+
+        /* 新增样式，调整选择食堂部分的行间距和宽度 */
+        #date-canteen input[type="radio"] + label {
+            margin-bottom: 0;
+        }
+
+        #date-canteen > div {
+            width: calc(33.33% - 10px);
+        }
+
+        #login-section {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 50px auto;
+            max-width: 300px;
+        }
+
+        #login-section h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        #login-section input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        #login-section button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #login-section button:hover {
+            background-color: #2980b9;
+        }
+
+        #is-open-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        #is-open-label {
+            margin-right: 10px;
+        }
+
+        #not-open-note {
+            color: red;
+            display: none;
+        }
+
+       .single-dish {
+            display: flex;
+            gap: 10px;
+        }
+
+       .single-dish input[type="number"] {
+            position: relative;
+        }
+
+       .single-dish input[type="number"]::before {
+            content: "￥";
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+    <script>
+        // 修改uploadPublicity函数，将数据显示在主页公示区域
+        function uploadPublicity() {
+            const canteen = document.getElementById('canteen').value;
+            const isOpen = document.getElementById('is-open').value;
+            const dishes = [];
+            const dishInputs = document.querySelectorAll('.single-dish input[type="text"]');
+            const priceInputs = document.querySelectorAll('.single-dish input[type="number"]');
+            for (let i = 0; i < dishInputs.length; i++) {
+                const dish = dishInputs[i].value;
+                const price = priceInputs[i].value;
+                if (dish && price) {
+                    dishes.push({ dish, price });
+                }
+            }
+            try {
+                // 保存数据到localStorage
+                localStorage.setItem('todayDishes', JSON.stringify({ canteen, isOpen, dishes }));
+            } catch (error) {
+                console.error('保存数据到localStorage失败:', error);
+            }
+            // 在主页公示区域显示数据
+            const targetContainerId = `${canteen.toLowerCase().replace(' ', '-')}-lunch`;
+            const targetContainer = document.getElementById(targetContainerId);
+            if (targetContainer) {
+                targetContainer.innerHTML = '';
+                dishes.forEach(dish => {
+                    const dishDiv = document.createElement('div');
+                    dishDiv.textContent = `${dish.dish}: ￥${dish.price}`;
+                    targetContainer.appendChild(dishDiv);
+                });
+            }
+            try {
+                // 假设这里是数据库操作的代码
+                // 例如：打开数据库连接，执行插入操作等
+                console.log('开始数据库操作');
+                const db = new SQL.Database('menu.db');
+                const stmt = db.prepare("INSERT OR REPLACE INTO menu (id, data) VALUES (1, @data)");
+                stmt.bind({ '@data': JSON.stringify(dishes) });
+                stmt.step();
+                stmt.free();
+                db.close();
+                alert('菜单已成功上传至公示页面！');
+            } catch (e) {
+                console.error('数据库操作失败:', e);
+                alert('菜单上传失败，请稍后重试');
+            }
+        }
+
+        // 页面加载时从localStorage恢复数据
+        window.onload = function() {
+            try {
+                const storedData = localStorage.getItem('todayDishes');
+                if (storedData) {
+                    const { canteen, isOpen, dishes } = JSON.parse(storedData);
+                    document.getElementById('canteen').value = canteen;
+                    document.getElementById('is-open').value = isOpen;
+                    const targetContainerId = `${canteen.toLowerCase().replace(' ', '-')}-lunch`;
+                    const targetContainer = document.getElementById(targetContainerId);
+                    if (targetContainer) {
+                        targetContainer.innerHTML = '';
+                        dishes.forEach(dish => {
+                            const dishDiv = document.createElement('div');
+                            dishDiv.textContent = `${dish.dish}: ￥${dish.price}`;
+                            targetContainer.appendChild(dishDiv);
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('从localStorage恢复数据失败:', error);
+            }
+        };
+        // 登录功能
+        function login() {
+            console.log('登录按钮被点击');
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const validUsers = {
+                'lydct': '123',
+                'lyxct': '123',
+                'lybm': '123',
+                'lysk': '123',
+                'admin': 'admin'
+            };
+            console.log('用户名:', username);
+            console.log('密码:', password);
+            if (validUsers[username] === password) {
+                console.log('登录成功，尝试跳转页面');
+                // 修改跳转页面为当前页面，因为今日菜品上传部分在当前页面
+                // window.location.href = 'index.html'; 注释掉跳转，避免页面刷新丢失状态
+                // 隐藏非菜品上传部分
+                document.getElementById('public-menu').style.display = 'none';
+                document.getElementById('login-btn').style.display = 'none';
+                document.getElementById('login-section').style.display = 'none';
+                // 显示今日菜品上传部分
+                document.getElementById('upload-today-dishes').style.display = 'block';
+            } else {
+                console.log('用户名或密码错误');
+                document.getElementById('login-error').style.display = 'block';
+            }
+        }
+        // 监听回车事件
+        document.getElementById('username').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                login();
+            }
+        });
+        document.getElementById('password').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                login();
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <div id="public-menu" style="margin-top: 80px;">
+        <h2>今日菜单公示</h2>
+        <div class="canteen">
+            <h3>大餐厅</h3>
+            <div id="big-canteen-public"></div>
+        </div>
+        <div class="canteen">
+            <h3>小餐厅</h3>
+            <div id="small-canteen-public"></div>
+        </div>
+        <div class="canteen">
+            <h3>特色板面</h3>
+            <div id="noodle-public"></div>
+        </div>
+        <div class="canteen">
+            <h3>特色烧烤</h3>
+            <div id="barbecue-public"></div>
+        </div>
+    </div>
+
+    <div id="login-btn" style="position: fixed; top: 10px; right: 10px; background: white; padding: 8px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); z-index: 1000; cursor: pointer;"
+        onclick="document.getElementById('login-section').style.display='block'">登录</div>
+    <div id="login-section" style="position: fixed; top: 50px; right: 10px; background: white; padding: 8px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); display: none; z-index: 1000; width: 180px;">
+        <input type="text" id="username" placeholder="用户名" style="width: 100%; padding: 6px; margin-bottom: 6px; border: 1px solid #ddd; border-radius: 3px; box-sizing: border-box;">
+        <input type="password" id="password" placeholder="密码" style="width: 100%; padding: 6px; margin-bottom: 8px; border: 1px solid #ddd; border-radius: 3px; box-sizing: border-box;">
+        <button onclick="login()" style="width: 100%; padding: 6px; background: #2c3e50; color: white; border: none; border-radius: 3px; cursor: pointer;">登录</button>
+        <p id="login-error" style="color: red; display: none; font-size: 12px; margin-top: 6px; text-align: center;">用户名或密码错误</p>
+    </div>
+    <section id="today-menu" style="display: none;">
+        <h1 style="text-align: center;">今日菜单</h1>
+        <div class="canteen" id="big-canteen-container">
+            <h2>大餐厅</h2>
+            <div class="dish-container" id="big-canteen-lunch"></div>
+        </div>
+        <div class="canteen" id="small-canteen-container">
+            <h2>小餐厅</h2>
+            <div class="dish-container" id="small-canteen-lunch"></div>
+        </div>
+        <div class="canteen" id="noodle-container">
+            <h2>特色板面</h2>
+            <div class="dish-container" id="noodle-lunch"></div>
+        </div>
+        <div class="canteen" id="barbecue-container">
+            <h2>特色烧烤</h2>
+            <div class="dish-container" id="barbecue-lunch"></div>
+        </div>
+    </section>
+    <!-- 移动今日菜品上传部分到登录成功后显示的区域 -->
+    <section id="upload-today-dishes" style="display: none;">
+        <h2>今日菜品上传</h2> 
+        <form id="upload-form">
+            <div class="upload-item" style="display: flex; gap: 10px;">
+                <div>
+                    <label for="canteen">食堂选择</label>
+                    <select id="canteen" name="canteen">
+                        <option value="大餐厅">大餐厅</option>
+                        <option value="小餐厅">小餐厅</option>
+                        <option value="特色板面">特色板面</option>
+                        <option value="特色烧烤">特色烧烤</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="is-open">是否营业</label>
+                    <select id="is-open" name="is-open">
+                        <option value="营业" selected>营业</option>
+                        <option value="不营业">不营业</option>
+                    </select>
+                </div>
+            </div>
+            <div class="upload-item" style="display: flex; gap: 10px;">
+                <div>
+                    <label for="dish-name">菜品名称</label>
+                    <input type="text" id="dish-name" name="dish-name">
+                </div>
+                <div>
+                    <label for="dish-price">菜品价格</label>
+                    <input type="number" id="dish-price" name="dish-price">
+                </div>
+            </div>
+            <div class="upload-item">
+                <button type="button" onclick="addToTodayDishes()">添加到今日菜品</button>
+                <button type="button" onclick="uploadTodayDishes()">今日菜品上传</button>
+            </div>
+            <div id="today-dishes-list"></div>
+            <script>
+                let todayDishesArray = [];
+                function addToTodayDishes() {
+                    const canteen = document.getElementById('canteen').value;
+                    const isOpen = document.getElementById('is-open').value;
+                    const dishName = document.getElementById('dish-name').value;
+                    const dishPrice = document.getElementById('dish-price').value;
+                    if (dishName && dishPrice) {
+                        const dishItem = document.createElement('div');
+                        dishItem.textContent = `${canteen} - ${isOpen} - ${dishName} - ${dishPrice}元`;
+                        const deleteButton = document.createElement('button');
+                        deleteButton.textContent = '删除';
+                        deleteButton.onclick = function() {
+                            const index = todayDishesArray.indexOf(dishItem.textContent);
+                            if (index > -1) {
+                                todayDishesArray.splice(index, 1);
+                            }
+                            dishItem.remove();
+                        };
+                        dishItem.appendChild(deleteButton);
+                        document.getElementById('today-dishes-list').appendChild(dishItem);
+                        todayDishesArray.push(dishItem.textContent);
+                        document.getElementById('dish-name').value = '';
+                        document.getElementById('dish-price').value = '';
+                    }
+                }
+                function uploadTodayDishes() {
+                    console.log('开始上传今日菜品');
+                    const todayDishes = document.getElementById('today-dishes-list').children;
+                    const dishes = [];
+                    for (let i = 0; i < todayDishes.length; i++) {
+                        dishes.push(todayDishes[i].textContent.replace('删除', ''));
+                    }
+                    console.log('待上传的今日菜品:', dishes);
+                    // 这里可以添加实际的上传逻辑
+                    console.log('尝试上传今日菜品');
+                    try {
+                        // 假设这里是数据库操作的代码
+                        // 例如：打开数据库连接，执行插入操作等
+                        console.log('开始数据库操作');
+                        // ... 数据库操作代码 ...
+                        console.log('数据库操作完成');
+                        alert('菜单已成功上传至公示页面！');
+                    } catch (e) {
+                        console.error('数据库操作失败:', e);
+                        alert('菜单上传失败，请稍后重试');
+                    }
+                    console.log('上传今日菜品结束');
+                }
+                window.onbeforeunload = function() {
+                    todayDishesArray = [];
+                    document.getElementById('today-dishes-list').innerHTML = '';
+                };
+            </script>
+            <style>
+                #today-dishes-list div {
+                    background-color: #f9f9f9;
+                    border: 1px solid #ddd;
+                    padding: 10px;
+                    margin: 5px 0;
+                    border-radius: 5px;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                }
+            </style>
+        </form>
+    </section>
+</body>
+
+</html>
